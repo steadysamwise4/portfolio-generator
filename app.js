@@ -1,4 +1,4 @@
-const fs = require('fs');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 const generatePage = require('./src/page-template.js');
 
 const mockData = {
@@ -48,8 +48,8 @@ confirmAddProject: false
 }
 
 
-const pageHTML = generatePage(mockData);
-console.log("Your file is written! ... You're welcome.");
+ // const pageHTML = generatePage(mockData);
+
 
 const inquirer = require('inquirer');
 
@@ -180,13 +180,29 @@ Add a New Project
         }
     });
 };
+// const mockFunction = (mockData => {
+//     return generatePage(mockData);
+// });
 
-// promptUser()
-//     .then(promptProject)
-//     .then(portfolioData => {
-        
-//         const pageHTML = generatePage(portfolioData);
-       
+
+promptUser()
+    .then(promptProject)
+    .then(portfolioData => {
+        return generatePage(portfolioData);
+    })
+    .then(pageHTML => {
+        return writeFile(pageHTML);
+    })
+    .then(writeFileResponse => {
+        console.log(writeFileResponse.message);
+        return copyFile();
+    })
+    .then(copyFileResponse => {
+        console.log(copyFileResponse.message);
+    })
+    .catch(err => {
+        console.log(err);
+    });
         // fs.writeFile('./index.html', pageHTML, err => {
         //     if (err) throw new Error(err);
         
@@ -195,8 +211,6 @@ Add a New Project
 //     });
 
 
-fs.writeFile('./index.html', pageHTML, err => {
-    if (err) throw new Error(err);
-});
+
 
         
